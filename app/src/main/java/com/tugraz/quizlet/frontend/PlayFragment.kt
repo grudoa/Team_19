@@ -12,9 +12,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.tugraz.quizlet.R
 import com.tugraz.quizlet.backend.database.model.Question
-import com.tugraz.quizlet.backend.database.model.Question_category
-import io.realm.RealmList
-import org.bson.types.ObjectId
 import java.util.Collections.shuffle
 
 
@@ -61,7 +58,7 @@ class PlayFragment : Fragment(), View.OnClickListener {
             view.findViewById<Button>(ANSWER_BUTTONS[i]).setOnClickListener(this)
         }
 
-        SplashActivity.requestHandler.startNewGameAndReturnTheFirstQuestion()
+        SplashActivity.requestHandler.startNewGame()
         displayNewQuestion(view)
 
         return view
@@ -87,20 +84,13 @@ class PlayFragment : Fragment(), View.OnClickListener {
             }
     }
 
-    private fun loadNewQuestion() : Question {
-        return Question(ObjectId(), Question_category("Category", "Category"), "What is the answer?", "Answer " + Math.random().toString(), null, RealmList(
-                "Answer " + Math.random().toString(),
-                "Answer " + Math.random().toString(),
-                "Answer " + Math.random().toString()))
-    }
-
     private fun displayNewQuestion(view: View) {
 
         //TODO Implement once database is ready
         val newQuestion  = SplashActivity.requestHandler.getNextQuestionAndUpdateRemainingAndUpdateHighscore()
         currentQuestion = newQuestion
         val currentscore = view.findViewById<TextView>(R.id.text_view_current_score)
-        currentscore.text = SplashActivity.requestHandler.getHighscoreCurrentGame().toString()
+        currentscore.text = SplashActivity.requestHandler.getCurrentHighscoreOfGame().toString()
 
         //TODO handle no new question
         if(newQuestion == null) {
@@ -159,7 +149,7 @@ class PlayFragment : Fragment(), View.OnClickListener {
     }
 
     private fun switchToScoreFragment(currentFragment: PlayFragment) {
-        val transaction = parentFragmentManager.beginTransaction();
+        val transaction = parentFragmentManager.beginTransaction()
         val scoreFragment = ScoreFragment()
 
         val arguments = Bundle()

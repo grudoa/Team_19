@@ -89,7 +89,7 @@ class RequestHandlerUnitTest {
         val expectedQuestions:ImmutableList<Question> = generateRandomQuestion(5)
 
         `when`(mockDBInterface.getAllQuestions()).thenReturn(expectedQuestions)
-        requestHandler.startNewGameAndReturnTheFirstQuestion()
+        requestHandler.startNewGame()
         verify(mockDBInterface, times(1)).getAllQuestions()
         assertEquals(expectedQuestions, requestHandler.getRemainingQuestionForCurrentGame())
     }
@@ -99,7 +99,7 @@ class RequestHandlerUnitTest {
         val expectedQuestions:ImmutableList<Question> = ImmutableList.of()
 
         `when`(mockDBInterface.getAllQuestions()).thenReturn(expectedQuestions)
-        requestHandler.startNewGameAndReturnTheFirstQuestion()
+        requestHandler.startNewGame()
         verify(mockDBInterface, times(1)).getAllQuestions()
         assertEquals(expectedQuestions, requestHandler.getRemainingQuestionForCurrentGame())
     }
@@ -113,7 +113,7 @@ class RequestHandlerUnitTest {
         val question = requestHandler.getNextQuestionAndUpdateRemainingAndUpdateHighscore()
 
         assertEquals(firstQuestion, question)
-        assertEquals(0, requestHandler.getHighscoreCurrentGame()) // 0 because of first question of the game
+        assertEquals(0, requestHandler.getCurrentHighscoreOfGame()) // 0 because of first question of the game
     }
 
     @Test
